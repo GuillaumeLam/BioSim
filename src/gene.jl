@@ -3,6 +3,7 @@ const ACTION = Int8(1) # always a sink
 const NEURON = Int8(0) # either source or sink
 
 function parseHex(hStr)
+    # todo: add check that strings are hex vals of length 8
     hex = parse(UInt32, hStr, base=16)
     bStr = string(hex, base=2)
 
