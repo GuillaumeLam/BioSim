@@ -1,0 +1,52 @@
+three types of neurons:
+-sensory input
+  output: 0.0 to 1.0
+-internal neurons
+  output: tanh(∑(inputs)) ie -1.0 to 1.0
+-action outputs
+  output: tanh(∑(inputs)) ie -1.0 to 1.0
+  -> prob of firing
+
+weight(for all): -4.0 to 4.0
+
+1.start with all types of neurons
+2.take genome to make connections ie brain
+3.cull all neurons with no output if sensory/internal
+ & cull all neurons with no input if action/internal
+ (careful with self directed neurons)
+
+SENSORY INPUTS
+slr = pheromone gradient left-right
+sfd = pheromone gradient forward
+sg = pheromone density
+age = age
+rng = random input
+blr = blockage left-right
+bfd = blockage forward
+osc = oscillator (simple sine wave, could be timed with day/year/etc.)
+plr = population gradient left-right
+pdf = population gradient foward
+pop = population density
+lpf = population long-range forward
+lbf = blockage long-range forward
+lmy = last movement y
+lmx = last movement x
+bdy = north/south border dist
+bdx = east/west border dist
+bd = nearest border dist
+gen = genetic similarity of fwd neighbor
+lx = east/west world location
+ly = north/south world location
+
+ACTION OUTPUTS
+lpd = set long-probe dist
+kill = kill forward neighbor
+osc = set oscillator period
+sg = emit pheromone
+res = set responsiveness(
+mfd = move forward
+mrn = move random
+mrv = move reverse
+mrl = move left/right (+/-)
+mx = move west/east (+/-)
+my = move north/south (+/-)
