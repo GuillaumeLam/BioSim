@@ -35,7 +35,7 @@ function parseHex(hStr)
     soT = parse(UInt8, bStr[1], base=2)
     soN = parse(UInt8, bStr[2:8], base=2)
     siT = parse(UInt8, bStr[9], base=2)
-    siN = parse(UInt8, bStr[9:16], base=2)
+    siN = parse(UInt8, bStr[10:16], base=2)
     w = parse(Int32, bStr[17:32], base=2)
 
     return soT, soN, siT, siN, w
