@@ -1,6 +1,6 @@
-const SENSOR = Int8(1) # always a source
-const ACTION = Int8(1) # always a sink
-const NEURON = Int8(0) # either source or sink
+const SENSOR = UInt8(1) # always a source
+const ACTION = UInt8(1) # always a sink
+const NEURON = UInt8(0) # either source or sink
 
 function parseHex(hStr)
     # todo: add check that strings are hex vals of length 8
@@ -20,7 +20,7 @@ function parseHex(hStr)
     return soT, soN, siT, siN, w
 end
 
-struct Gene
+mutable struct Gene
     # packedGene::String
 
     sourceType::UInt8  # 1bit SENSOR / NEURON
