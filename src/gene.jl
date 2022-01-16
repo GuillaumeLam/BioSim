@@ -1,6 +1,27 @@
-const SENSOR = UInt8(1) # always a source
-const ACTION = UInt8(1) # always a sink
-const NEURON = UInt8(0) # either source or sink
+mutable struct Gene
+    sourceType::UInt8  # 1bit SENSOR / NEURON
+    sourceNum::UInt8   # 7bit
+    sinkType::UInt8    # 1bit NEURON / ACTION
+    sinkNum::UInt8     # 7bit
+    weight::Int32       # 16bit
+
+    function Gene()
+        gene = Random.randstring(['a':'f'; '0':'9'], 8)
+        return new(parseHex(gene)...)
+    end
+
+    function Gene(hexStr)
+        return new(parseHex(hexStr)...)
+    end
+end
+
+#+++++
+# Constructor func
+#+++++
+
+# const SENSOR = UInt8(1) # always a source
+# const ACTION = UInt8(1) # always a sink
+# const NEURON = UInt8(0) # either source or sink
 
 function parseHex(hStr)
     # todo: add check that strings are hex vals of length 8
@@ -20,33 +41,4 @@ function parseHex(hStr)
     return soT, soN, siT, siN, w
 end
 
-mutable struct Gene
-    # packedGene::String
-
-    sourceType::UInt8  # 1bit SENSOR / NEURON
-    sourceNum::UInt8   # 7bit
-    sinkType::UInt8    # 1bit NEURON / ACTION
-    sinkNum::UInt8     # 7bit
-    weight::Int32       # 16bit
-
-    # function Gene()
-    #     gene = Random.randstring(['a':'f'; '0':'9'], 8)
-    #     return new(gene, parseHex(gene)...)
-    # end
-    #
-    # function Gene(hexStr)
-    #     return new(hexStr, parseHex(hexStr)...)
-    # end
-
-    function Gene()
-        gene = Random.randstring(['a':'f'; '0':'9'], 8)
-        return new(parseHex(gene)...)
-    end
-
-    function Gene(hexStr)
-        return new(parseHex(hexStr)...)
-    end
-end
-
-# @btime g = Gene()
-# ~540 ns (8 allocations: 550 bytes)
+#+++++
