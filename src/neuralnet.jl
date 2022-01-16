@@ -6,8 +6,12 @@ struct NeuralNet
         conn = Vector{Gene}()
         renumberConn!(g, conn)
 
+        nodeDict = Dict{Int,Node}()
+        popNodeDict!(conn, nodeDict)
+
         neurons = Vector{AbstractNeuron}()
-        return new(conn, neurons)
+        # return new(conn, neurons)
+        return nodeDict
     end
 
     function NeuralNet(genomeStr::Vector{String})
