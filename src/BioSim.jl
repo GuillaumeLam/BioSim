@@ -15,5 +15,6 @@ include("neuron.jl")
 include("node.jl")
 include("neuralnet.jl")
 export NeuralNet
+export getUsedConn!, getUsedNeuron!
 
 end
