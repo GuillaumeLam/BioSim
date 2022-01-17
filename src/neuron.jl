@@ -9,6 +9,8 @@ struct PDF<:AbstractSensoryInput
 
 end
 
-struct Neuron<:AbstractInternalNeuron
-
+mutable struct Neuron<:AbstractInternalNeuron
+    output::Float16
+    driven::Bool
+    Neuron(driven::Bool) = new(0.5, driven)
 end

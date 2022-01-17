@@ -9,8 +9,7 @@ struct NeuralNet
 		orderConn!(conn)
 
 		neurons = Dict{Int,AbstractNeuron}()
-		# iter thru conn & add neuron
-		# remap conn numbers or make `neurons = Dict{Int,AbstractNeuron}`
+		genNeurons!(conn, neurons)
 
 		return new(conn, neurons)
     end
@@ -71,18 +70,18 @@ function getUsedNeuron!(conn::Vector{Gene}, nodes::Vector{Int}, node::Union{Gene
 
 		# mutating version
 		# ================
-        # for an in actionNeurons
-        #     append!(nodes, getUsedNeuron!(rest, nodes, an))
-        #     unique!(nodes)
-        # end
+        for an in actionNeurons
+            append!(nodes, getUsedNeuron!(rest, nodes, an))
+            unique!(nodes)
+        end
 
 		# non-mutating version
 		# ====================
-        v = Vector{Int}()
-		for an in actionNeurons
-			append!(v, getUsedNeuron!(rest,nodes,an))
-		end
-		return unique!(v)
+        # v = Vector{Int}()
+		# for an in actionNeurons
+		# 	append!(v, getUsedNeuron!(rest,nodes,an))
+		# end
+		# return unique!(v)
 
     elseif node.sourceType == 1 # base case: found a path to sensor neuron
         return nodes
@@ -122,9 +121,26 @@ function orderConn!(conn::Vector{Gene})
 	append!(conn, toNeuron)
 	append!(conn, toAction)
 end
+
+function genNeurons!(conn::Vector{Gene}, neurons::Dict{Int,AbstractNeuron})
+	for gene in conn
+		if gene.sourceType==0 && !haskey(neurons, gene.sourceNum)
+			neurons[gene.sourceNum]=BioSim.Neuron(false)
+		end
+
+		if gene.sinkType==0
+			if !haskey(neurons, gene.sinkNum)
+				neurons[gene.sinkNum]=BioSim.Neuron(true)
+			else
+				neurons[gene.sinkNum].driven = true
+			end
+		end
+	end
+end
+
 #+++++
 
 # feedfoward
-function (brain::NeuralNet)(x)
-    return x
+function (brain::NeuralNet)()
+    return true
 end
