@@ -5,21 +5,8 @@ struct NeuralNet
     function NeuralNet(g::Genome)
         conn = Vector{Gene}()
         renumberConn!(g, conn)
-		getUsedConn!(conn)
-
-        # take used connections & reorder
-        # iter in 2 passes
-        # O(2n)
-        # pass 1: add from (source or neuron) to neuron
-        # pass 2: add from (source or neuron) to action
-        # or
-        # O(n)
-        # iter on all
-        # if (source or neuron) to neuron
-        # 	add to neurons
-        # else
-        # 	add to tmp_neurons
-        # append!(neurons, tmp_neurons)
+		keepUsedConn!(conn)
+		orderConn!(conn)
 
 		neurons = Vector{AbstractNeuron}()
 		# iter thru conn & add neuron
@@ -59,7 +46,7 @@ function renumberConn!(g::Genome, conn::Vector{Gene}; maxNeurons=10)
 end
 
 # Tree search starting from Action Neurons to Sensor Neurons
-function getUsedConn!(conn::Vector{Gene})
+function keepUsedConn!(conn::Vector{Gene})
 	usedNeuron = Vector{Int}()
 	getUsedNeuron!(conn, usedNeuron)
 	filter!(gene->
@@ -87,7 +74,6 @@ function getUsedNeuron!(conn::Vector{Gene}, nodes::Vector{Int}, node::Union{Gene
             append!(nodes, getUsedNeuron!(rest, nodes, an))
             unique!(nodes)
         end
-        return nodes
 
 		# non-mutating version
 		# ====================
@@ -112,6 +98,25 @@ function getUsedNeuron!(conn::Vector{Gene}, nodes::Vector{Int}, node::Union{Gene
     end
 end
 
+function orderConn!(conn::Vector{Gene})
+	fromSnsr = Vector{Gene}()
+	toNeuron = Vector{Gene}()
+	toAction = Vector{Gene}()
+
+	for gene in conn
+		if gene.sourceType==1
+			push!(fromSnsr, gene)
+		elseif gene.sinkType==0
+			push!(toNeuron, gene)
+		else
+			push!(toAction, gene)
+		end
+	end
+	empty!(conn)
+	append!(conn, fromSnsr)
+	append!(conn, toNeuron)
+	append!(conn, toAction)
+end
 #+++++
 
 # take genome and generate brain
