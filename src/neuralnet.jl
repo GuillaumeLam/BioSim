@@ -1,6 +1,6 @@
 struct NeuralNet
     connections::Vector{Gene}
-    neurons::Vector{AbstractNeuron}
+    neurons::Dict{Int,AbstractNeuron}
 
     function NeuralNet(g::Genome)
         conn = Vector{Gene}()
@@ -8,9 +8,9 @@ struct NeuralNet
 		keepUsedConn!(conn)
 		orderConn!(conn)
 
-		neurons = Vector{AbstractNeuron}()
+		neurons = Dict{Int,AbstractNeuron}()
 		# iter thru conn & add neuron
-		# reorder conn numbers or make neurons = Dict{Int,AbstractNeuron}
+		# remap conn numbers or make `neurons = Dict{Int,AbstractNeuron}`
 
 		return new(conn, neurons)
     end
@@ -63,25 +63,26 @@ function getUsedNeuron!(conn::Vector{Gene}, nodes::Vector{Int}, node::Union{Gene
 		# no need to pass around & search full list
 		# filter out internal neurons with self output
         actionNeurons = filter(gene->gene.sinkType==1,conn)
-        rest = filter(
-			gene->gene.sinkType==0&&(gene.sinkNum!=gene.sourceNum||gene.sourceType!=0),
-			conn
-		)
+        # rest = filter(
+		# 	gene->gene.sinkType==0&&(gene.sinkNum!=gene.sourceNum||gene.sourceType!=0),
+		# 	conn
+		# )
+        rest = filter(gene->gene.sinkType==0,conn)
 
 		# mutating version
 		# ================
-        for an in actionNeurons
-            append!(nodes, getUsedNeuron!(rest, nodes, an))
-            unique!(nodes)
-        end
+        # for an in actionNeurons
+        #     append!(nodes, getUsedNeuron!(rest, nodes, an))
+        #     unique!(nodes)
+        # end
 
 		# non-mutating version
 		# ====================
-        # v = Vector{Int}()
-		# for an in actionNeurons
-		# 	append!(v, getUsedNeuron!(rest,nodes,an))
-		# end
-		# return unique!(v)
+        v = Vector{Int}()
+		for an in actionNeurons
+			append!(v, getUsedNeuron!(rest,nodes,an))
+		end
+		return unique!(v)
 
     elseif node.sourceType == 1 # base case: found a path to sensor neuron
         return nodes
@@ -89,10 +90,14 @@ function getUsedNeuron!(conn::Vector{Gene}, nodes::Vector{Int}, node::Union{Gene
         neurons = filter(gene->gene.sinkNum==node.sourceNum, conn)
         rest = filter(gene->gene.sinkNum!=node.sourceNum, conn)
 
-        for n in neurons
-            usedNeuron = getUsedNeuron!(rest,vcat(nodes, node.sourceNum), n)
-            nodes = vcat(nodes, usedNeuron)
-        end
+		if isempty(neurons)
+			nodes = vcat(nodes,node.sourceNum)
+		else
+			for n in neurons
+	            usedNeuron = getUsedNeuron!(rest,vcat(nodes, node.sourceNum), n)
+	            nodes = vcat(nodes, usedNeuron)
+	        end
+		end
 
         return nodes
     end
@@ -118,8 +123,6 @@ function orderConn!(conn::Vector{Gene})
 	append!(conn, toAction)
 end
 #+++++
-
-# take genome and generate brain
 
 # feedfoward
 function (brain::NeuralNet)(x)

@@ -91,13 +91,38 @@ genomeTest7 = [
     "0603cccc",
     "0181dddd",
     "0282dddd"
-] # correct output: [1,2,5,6,7,9]
+] # correct output: [1,2,4,5,6,7,8,9]
 genomeTest8 = [
     "8101aaaa",
     "0181cccc",
     "0201bbbb",
     "0202bbbb"
+] # correct output: [1,2]
+genomeTest9 = [
+    "8101aaaa",
+    "0102bbbb",
+    "0181cccc"
 ] # correct output: [1]
+genomeTest10 = [
+    "8101aaaa",
+    "8102aaaa",
+    "0181bbbb"
+] # correct output: [1]
+genomeTest11 = [
+    "8182aaaa",
+    "0101bbbb",
+    "0181bbbb",
+    "0182bbbb"
+] # correct output: [1]
+genomeTest12 = [
+    "8181aaaa",
+    "8202aaaa",
+    "0181bbbb",
+    "0182bbbb",
+    "0102bbbb",
+    "0202bbbb",
+    "0283bbbb"
+] # correct output: [1,2]
 
 tests = [
     genomeTest1,
@@ -110,7 +135,11 @@ tests = [
     genomeTest5b,
     genomeTest6,
     genomeTest7,
-    genomeTest8
+    genomeTest8,
+    genomeTest9,
+    genomeTest10,
+    genomeTest11,
+    genomeTest12
 ]
 
 usedNeuron = Vector{Int}()
