@@ -3,22 +3,7 @@ struct Genome
 
     Genome() = new(Vector{Gene}())
     Genome(genomeStr::Vector{String}) = new(Gene.(genomeStr))
-end
-
-function addGene!(genome::Genome, gene::Gene)
-    push!(genome.genome, gene)
-end
-
-function randGenome!(genome::Genome, n)
-    for _ in 1:n
-        addGene!(genome, Gene())
-    end
-end
-
-function randGenome(n)
-    genome = Genome()
-    randGenome!(genome, n)
-    return genome
+    Genome(n::Int) = Genome(randGenomeStr(n))
 end
 
 function randGenomeStr(n)
