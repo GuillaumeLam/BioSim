@@ -3,7 +3,7 @@ mutable struct Gene
     sourceNum::UInt8   # 7bit
     sinkType::UInt8    # 1bit NEURON / ACTION
     sinkNum::UInt8     # 7bit
-    weight::Int32       # 16bit
+    weight::Int16       # 16bit
 
     function Gene()
         gene = Random.randstring(['a':'f'; '0':'9'], 8)
@@ -36,9 +36,15 @@ function parseHex(hStr)
     soN = parse(UInt8, bStr[2:8], base=2)
     siT = parse(UInt8, bStr[9], base=2)
     siN = parse(UInt8, bStr[10:16], base=2)
-    w = parse(Int32, bStr[17:32], base=2)
+    # w = parse(Int32, bStr[17:32], base=2)
+    # reinterpret(Int16, 0xffff) output: -1
+    w = reinterpret(Int16, parse(UInt16, hStr[5:8],base=16))
 
     return soT, soN, siT, siN, w
 end
 
 #+++++
+# Struct func
+#+++++
+
+floarWeight(g::Gene) = return (g.weight / 8192.0)
