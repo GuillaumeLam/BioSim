@@ -43,19 +43,21 @@ function moduloConnNum!(g::Genome, conn::Vector{Gene}; maxNeurons=10)
     end
 end
 
-# Tree search starting from Action Neurons to Sensor Neurons
+# Use list of used internal neurons to keep only connections involving them
+# & Change numbering of nodes to 1:length(usedNodes)
 function keepUsedConn!(conn::Vector{Gene})
-	usedNeuron = Vector{Int}()
-	getUsedNeuron!(conn, usedNeuron)
+	usedNodes = Vector{Int}()
+	getUsedNodes!(conn, usedNodes)
 	filter!(gene->
-		!(gene.sourceType==0&&gene.sourceNum∉usedNeuron)&&
-		!(gene.sinkType==0&&gene.sinkNum∉usedNeuron),
+		!(gene.sourceType==0&&gene.sourceNum∉usedNodes)&&
+		!(gene.sinkType==0&&gene.sinkNum∉usedNodes),
 		conn
 	)
+	remapConn!(conn, usedNodes)
 end
 
-# Tree search starting from Action Neurons to Sensor Neurons
-function getUsedNeuron!(conn::Vector{Gene}, nodes::Vector{Int}, node::Union{Gene,Nothing}=nothing)
+# Tree search starting from Action Neurons
+function getUsedNodes!(conn::Vector{Gene}, nodes::Vector{Int}, node::Union{Gene,Nothing}=nothing)
     if isnothing(node) # starting case: find action neurons and recurse on them
 		# split on sink type
 		# no need to pass around & search full list
@@ -70,17 +72,20 @@ function getUsedNeuron!(conn::Vector{Gene}, nodes::Vector{Int}, node::Union{Gene
 		# mutating version
 		# ================
         for an in actionNeurons
-            append!(nodes, getUsedNeuron!(rest, nodes, an))
+            append!(nodes, getUsedNodes!(rest, nodes, an))
             unique!(nodes)
+			sort!(nodes)
         end
 
 		# non-mutating version
 		# ====================
         # v = Vector{Int}()
 		# for an in actionNeurons
-		# 	append!(v, getUsedNeuron!(rest,nodes,an))
+		# 	append!(v, getUsedNodes!(rest,nodes,an))
 		# end
-		# return unique!(v)
+		# unique!(v)
+		# sort!(v)
+		# return v
 
     elseif node.sourceType == 1 # base case: found a path to sensor neuron
         return nodes
@@ -92,7 +97,7 @@ function getUsedNeuron!(conn::Vector{Gene}, nodes::Vector{Int}, node::Union{Gene
 			nodes = vcat(nodes,node.sourceNum)
 		else
 			for n in neurons
-	            usedNeuron = getUsedNeuron!(rest,vcat(nodes, node.sourceNum), n)
+	            usedNeuron = getUsedNodes!(rest,vcat(nodes, node.sourceNum), n)
 	            nodes = vcat(nodes, usedNeuron)
 	        end
 		end
