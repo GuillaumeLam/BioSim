@@ -44,7 +44,15 @@ function parseHex(hStr)
 end
 
 #+++++
-# Struct func
+# Overload func
 #+++++
 
-floarWeight(g::Gene) = return (g.weight / 8192.0)
+function Base.getproperty(g::Gene, p::Symbol)
+    if p == :weight
+        return (getfield(g, p) / 8192.0)
+    elseif p == :weightInt
+        return getfield(g,:weight)
+    else
+        return getfield(g,p)
+    end
+end
