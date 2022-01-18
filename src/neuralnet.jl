@@ -170,8 +170,41 @@ function genNeurons!(conn::Vector{Gene}, neurons::Dict{Int,AbstractNeuron})
 end
 
 #+++++
+# Struct func
+#+++++
 
-# feedfoward
+# tmp function to debug
+getSensor(a) = return 0.5
+
+# feedfoward ie step forward in time the neural network
 function (brain::NeuralNet)()
-    return true
+	actionLevels = zeros(NUM_ACTIONS)
+	neuronAcc = zeros(length(brain.neurons))
+	neuronOutputComp = false
+
+	for conn in brain.connections
+		if conn.sinkType == 1 && !neuronOutputComp
+			for (key, neuron) in brain.neurons
+				if neuron.driven
+					neuron.output = tanh(neuronAcc[key])
+				end
+			end
+			neuronOutputComp = true
+		end
+
+		inputVal = rand(Float64)
+
+		if conn.sourceType == 1
+			inputVal = getSensor(conn.sourceNum)
+		else
+			inputVal = brain.neurons[conn.sourceNum].output
+		end
+
+		if conn.sinkType == 1
+			actionLevels[conn.sinkNum] += inputVal * conn.weight
+		else
+			neuronAcc[conn.sinkNum] += inputVal * conn.weight
+		end
+	end
+	return actionLevels
 end
