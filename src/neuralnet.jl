@@ -4,13 +4,12 @@ struct NeuralNet
 
     function NeuralNet(g::Genome)
         conn = Vector{Gene}()
-        renumberConn!(g, conn)
+        moduloConnNum!(g, conn)
 		keepUsedConn!(conn)
 		orderConn!(conn)
 
 		neurons = Dict{Int,AbstractNeuron}()
 		genNeurons!(conn, neurons)
-
 		return new(conn, neurons)
     end
 
@@ -26,7 +25,7 @@ end
 NUM_SENSORS = 21
 NUM_ACTIONS = 11
 
-function renumberConn!(g::Genome, conn::Vector{Gene}; maxNeurons=10)
+function moduloConnNum!(g::Genome, conn::Vector{Gene}; maxNeurons=10)
     for gene in g.genome
         if gene.sourceType == 0 # ie a neuron
             gene.sourceNum %= maxNeurons
