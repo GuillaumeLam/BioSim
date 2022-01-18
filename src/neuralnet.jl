@@ -106,6 +106,31 @@ function getUsedNodes!(conn::Vector{Gene}, nodes::Vector{Int}, node::Union{Gene,
     end
 end
 
+# Replace largest val num for missing num, then use second largest
+# Eg. [1 3 4] (source/sink)Num 4 => 2
+# More effecient than 'moving' them down in value one by one
+function remapConn!(conn::Vector{Gene}, nodes::Vector{Int})
+	offset = 0
+	for i in 1:length(nodes)
+		idx = findfirst(x->x==i,nodes)
+		if isnothing(idx)
+			changeNodeNum!(conn,nodes[end-offset],i)
+			offset += 1
+		end
+	end
+end
+
+function changeNodeNum!(conns::Vector{Gene}, oldNum::Int, newNum::Int)
+	for conn in conns
+		if conn.sinkType == 0 && conn.sinkNum == oldNum
+			conn.sinkNum = UInt8(newNum)
+		end
+		if conn.sourceType == 0 && conn.sourceNum == oldNum
+			conn.sourceNum = UInt8(newNum)
+		end
+	end
+end
+
 function orderConn!(conn::Vector{Gene})
 	fromSnsr = Vector{Gene}()
 	toNeuron = Vector{Gene}()
@@ -125,6 +150,8 @@ function orderConn!(conn::Vector{Gene})
 	append!(conn, toNeuron)
 	append!(conn, toAction)
 end
+
+#+++++
 
 function genNeurons!(conn::Vector{Gene}, neurons::Dict{Int,AbstractNeuron})
 	for gene in conn
