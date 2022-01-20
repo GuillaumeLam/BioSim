@@ -20,4 +20,8 @@ export getUsedConn!, getUsedNeuron!
 include("boid.jl")
 export Boid
 
+include("environment.jl")
+export Environment
+export findEmptyLoc, populate!
+
 end
