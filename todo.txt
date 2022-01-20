@@ -1,3 +1,10 @@
 -benchmark functions
 -add tests
--calib weights of genes
+
+-setup sensors(input)
+-setup actions(output)
+-setup env
+-setup main loops (generation, simStep)
+-setup selection & breeding (mutation) for next generation
+
+-implement miller's version to cull useless nodes/connections (to compare)
