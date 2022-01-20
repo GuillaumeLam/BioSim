@@ -17,4 +17,7 @@ include("neuralnet.jl")
 export NeuralNet
 export getUsedConn!, getUsedNeuron!
 
+include("boid.jl")
+export Boid
+
 end
