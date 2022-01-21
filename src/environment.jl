@@ -55,6 +55,7 @@ end
 
 function (env::Environment)()
     env.population.()
+    # use brain action levels to impact grid
 end
 
 function newGen(env::Environment)
