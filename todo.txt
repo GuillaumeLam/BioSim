@@ -4,6 +4,8 @@
 -setup sensors(input)
 -setup actions(output)
 -setup env
+  -add signals layer to world
+  -add display of world
 -setup main loops (generation, simStep)
 -setup selection & breeding (mutation) for next generation
 
