@@ -52,3 +52,13 @@ end
 #steps per gen
 #optional: obstacles
 #optional: food?
+
+function (env::Environment)()
+    env.population.()
+end
+
+function newGen(env::Environment)
+    # take all alive boids which follow selection criteria
+    # reproduce boids for new generation
+    # wipe board & populate with new gen
+end

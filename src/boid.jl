@@ -22,5 +22,12 @@ mutable struct Boid
     Boid(location::Tuple{Int,Int}) = Boid(location, 16)
 end
 
+function (boid::Boid)()
+    boid.age += 1
+
+    return boid.brain()
+end
+
 # reproduction
+# mutation
 # map genome to color for visual
