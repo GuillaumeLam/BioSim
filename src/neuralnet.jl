@@ -111,6 +111,8 @@ end
 # More effecient than 'moving' them down in value one by one
 function remapConn!(conn::Vector{Gene}, nodes::Vector{Int})
 	offset = 0
+
+	# internal nodes need to be 0 indexed
 	for i in 0:(length(nodes)-1)
 		idx = findfirst(x->x==i,nodes)
 		if isnothing(idx)
