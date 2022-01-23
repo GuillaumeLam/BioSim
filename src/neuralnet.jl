@@ -224,3 +224,116 @@ function toRGB(nn::NeuralNet)
 	B = parse(UInt, bStr[17:24], base=2)/255
     return RGB(R,G,B)
 end
+
+function display(nn::NeuralNet)
+	#make graph of boid's brain
+	sensors = Dict{Int,Int}()
+	actions = Dict{Int,Int}()
+
+	for conn in nn.connections
+		if conn.sourceType==1 & !haskey(sensors, conn.sourceNum)
+			sensors[conn.sourceNum] = 0
+		end
+		if conn.sinkType==1 & !haskey(actions, conn.sinkNum)
+			actions[conn.sinkNum] = 0
+		end
+	end
+
+	s = sort!(collect(keys(sensors)))
+	a = sort!(collect(keys(actions)))
+
+	size = length(sensors) + length(nn.neurons) + length(actions)
+
+	g = zeros(size, size)
+	edgelabels = Dict{Tuple{Int,Int},String}()
+	edgecolor = []
+	edgewidth = []
+	# edgelabels = zeros(size, size)
+
+	for conn in nn.connections
+		f = 0
+		if conn.sourceType == 0
+			f = length(sensors) + (conn.sourceNum+1)
+		else
+			f = findfirst(x->x==conn.sourceNum,s)
+		end
+
+		t = 0
+
+		if conn.sinkType == 0
+			t = length(sensors) + (conn.sinkNum+1)
+		else
+			t = length(sensors) +
+				length(nn.neurons) +
+				findfirst(x->x==conn.sinkNum,a)
+		end
+
+		g[f,t] = 1
+		push!(edgecolor, conn.weight>0 ? colorant"#00FF7F" : colorant"#DC143C")
+		push!(edgewidth, abs(round(conn.weight,digits=3))/4.0)
+		edgelabels[(f,t)]=string(round(conn.weight,digits=3))
+		# edgelabels[f,t]=string(round(conn.weight,digits=3))
+	end
+
+	n = sort!(collect(keys(nn.neurons)))
+
+	nodenames = []
+	nodecolor = []
+
+	for i in s
+		push!(nodenames, "S$i")
+		push!(nodecolor, colorant"#9558B2")
+	end
+	for i in n
+		push!(nodenames, "N$i")
+		push!(nodecolor, colorant"#389826")
+	end
+	for i in a
+		push!(nodenames, "A$i")
+		push!(nodecolor, colorant"#CB3C33")
+	end
+
+	# save("brain_graphplot.png",graphplot(
+	# 	g,
+	# 	names=nodenames,
+	# 	# fontsize=9,
+	# 	nodecolor=nodecolor,
+	# 	nodeshape=:circle,
+	# 	nodesize=0.15,
+	# 	edgelabel=edgelabels,
+	# 	edgestrokec=edgecolor,
+	# 	edgelabel_offset=0.085,
+	# 	curvature_scalar=0.025,
+	# 	arrow=arrow(:closed, :head)
+	# ))
+
+	graphplot(
+		g,
+		names=nodenames,
+		# fontsize=9,
+		nodecolor=nodecolor,
+		nodeshape=:circle,
+		nodesize=0.15,
+		edgelabel=edgelabels,
+		edgestrokec=edgecolor,
+		edgelabel_offset=0.085,
+		edge_label_box=true,
+		curvature_scalar=0.025,
+		arrow=arrow(:closed, :head)
+	)
+
+	# save("brain_gplot.png",gplot(
+	# 	SimpleWeightedDiGraph(g),
+	# 	# layout=circular_layout,
+	# 	nodelabel=nodenames,
+	# 	nodefillc=nodecolor,
+	# 	# nodeshape=:circle,
+	# 	# nodesize=0.15,
+	# 	# edgelabel=edgelabels,
+	# 	edgestrokec=edgecolor,
+	# 	edgelinewidth=edgewidth
+	# 	# edgelabel_offset=0.08,
+	# 	# curvature_scalar=0.025,
+	# 	# arrow=arrow(:closed, :head)
+	# ))
+end
