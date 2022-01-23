@@ -111,7 +111,7 @@ end
 # More effecient than 'moving' them down in value one by one
 function remapConn!(conn::Vector{Gene}, nodes::Vector{Int})
 	offset = 0
-	for i in 1:length(nodes)
+	for i in 0:(length(nodes)-1)
 		idx = findfirst(x->x==i,nodes)
 		if isnothing(idx)
 			changeNodeNum!(conn,nodes[end-offset],i)
