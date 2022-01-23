@@ -293,47 +293,19 @@ function display(nn::NeuralNet)
 		push!(nodecolor, colorant"#CB3C33")
 	end
 
-	# save("brain_graphplot.png",graphplot(
-	# 	g,
-	# 	names=nodenames,
-	# 	# fontsize=9,
-	# 	nodecolor=nodecolor,
-	# 	nodeshape=:circle,
-	# 	nodesize=0.15,
-	# 	edgelabel=edgelabels,
-	# 	edgestrokec=edgecolor,
-	# 	edgelabel_offset=0.085,
-	# 	curvature_scalar=0.025,
-	# 	arrow=arrow(:closed, :head)
-	# ))
+	# save("brain_graphplot.png",graphplot(...))
 
-	graphplot(
+	return graphplot(
 		g,
 		names=nodenames,
-		# fontsize=9,
 		nodecolor=nodecolor,
 		nodeshape=:circle,
 		nodesize=0.15,
 		edgelabel=edgelabels,
 		edgestrokec=edgecolor,
-		edgelabel_offset=0.085,
+		edgelabel_offset=0.09,
 		edge_label_box=true,
 		curvature_scalar=0.025,
 		arrow=arrow(:closed, :head)
 	)
-
-	# save("brain_gplot.png",gplot(
-	# 	SimpleWeightedDiGraph(g),
-	# 	# layout=circular_layout,
-	# 	nodelabel=nodenames,
-	# 	nodefillc=nodecolor,
-	# 	# nodeshape=:circle,
-	# 	# nodesize=0.15,
-	# 	# edgelabel=edgelabels,
-	# 	edgestrokec=edgecolor,
-	# 	edgelinewidth=edgewidth
-	# 	# edgelabel_offset=0.08,
-	# 	# curvature_scalar=0.025,
-	# 	# arrow=arrow(:closed, :head)
-	# ))
 end

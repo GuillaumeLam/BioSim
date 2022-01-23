@@ -2,9 +2,12 @@ module BioSim
 
 using BenchmarkTools
 
+using Random
+
 using Images
 using Plots
-using Random
+using GraphRecipes
+
 
 include("gene.jl")
 export Gene

@@ -7,6 +7,7 @@ DONE -setup env
   -add signals layer to world
   DONE -add display of world
 WIP -setup main loops (generation, simStep)
+DONE - display neuralnet
 -setup selection & breeding (mutation) for next generation
 
 -implement miller's version to cull useless nodes/connections (to compare)
