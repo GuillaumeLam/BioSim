@@ -1,12 +1,12 @@
 -benchmark functions
 -add tests
 
--setup sensors(input)
--setup actions(output)
--setup env
+WIP -setup sensors(input)
+WIP -setup actions(output)
+DONE -setup env
   -add signals layer to world
-  -add display of world
--setup main loops (generation, simStep)
+  DONE -add display of world
+WIP -setup main loops (generation, simStep)
 -setup selection & breeding (mutation) for next generation
 
 -implement miller's version to cull useless nodes/connections (to compare)

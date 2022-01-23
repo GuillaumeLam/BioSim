@@ -2,6 +2,8 @@ module BioSim
 
 using BenchmarkTools
 
+using Images
+using Plots
 using Random
 
 include("gene.jl")
@@ -22,6 +24,6 @@ export Boid
 
 include("environment.jl")
 export Environment
-export findEmptyLoc, populate!
+export findEmptyLoc, pop!
 
 end

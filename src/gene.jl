@@ -5,6 +5,8 @@ mutable struct Gene
     sinkNum::UInt8     # 7bit
     weight::Int16       # 16bit
 
+    hex::UInt32
+
     function Gene()
         gene = Random.randstring(['a':'f'; '0':'9'], 8)
         return new(parseHex(gene)...)
@@ -26,11 +28,7 @@ end
 function parseHex(hStr)
     # todo: add check that strings are hex vals of length 8
     hex = parse(UInt32, hStr, base=16)
-    bStr = string(hex, base=2)
-
-    if length(bStr)<32
-        bStr = lpad(bStr,32,"0")
-    end
+    bStr = lpad(string(hex, base=2),32,"0")
 
     soT = parse(UInt8, bStr[1], base=2)
     soN = parse(UInt8, bStr[2:8], base=2)
@@ -38,7 +36,7 @@ function parseHex(hStr)
     siN = parse(UInt8, bStr[10:16], base=2)
     w = reinterpret(Int16, parse(UInt16, hStr[5:8],base=16))
 
-    return soT, soN, siT, siN, w
+    return soT, soN, siT, siN, w, hex
 end
 
 #+++++

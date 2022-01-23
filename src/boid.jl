@@ -30,4 +30,8 @@ end
 
 # reproduction
 # mutation
-# map genome to color for visual
+# use genome to color for visual
+
+function toRGB(boid::Boid)
+    return toRGB(boid.brain)
+end

@@ -208,3 +208,17 @@ function (brain::NeuralNet)()
 	end
 	return actionLevels
 end
+
+function toRGB(nn::NeuralNet)
+    color = 0
+
+    for gene in nn.connections
+        color += gene.hex
+    end
+
+	bStr = lpad(string(color % 0xffffff, base=2),24,"0")
+	R = parse(UInt, bStr[1:8], base=2)/255
+	G = parse(UInt, bStr[9:16], base=2)/255
+	B = parse(UInt, bStr[17:24], base=2)/255
+    return RGB(R,G,B)
+end

@@ -27,22 +27,22 @@ function findEmptyLoc(env::Environment)
     return loc
 end
 
-function populate!(env::Environment, n::Number)
+function pop!(env::Environment, n::Number)
     for i in 1:n
         loc = findEmptyLoc(env)
         boid = Boid(loc)
-        populate!(env, boid, loc)
+        pop!(env, boid, loc)
     end
 end
 
-function populate!(env::Environment, boids::Vector{Boid})
+function pop!(env::Environment, boids::Vector{Boid})
     for boid in boids
         loc = findEmptyLoc(env)
-        populate!(env, boid, loc)
+        pop!(env, boid, loc)
     end
 end
 
-function populate!(env::Environment, boid::Boid, loc::Tuple{Number,Number})
+function pop!(env::Environment, boid::Boid, loc::Tuple{Number,Number})
     push!(env.population, boid)
     env.grid[loc...] = length(env.population)
 end
@@ -62,4 +62,19 @@ function newGen(env::Environment)
     # take all alive boids which follow selection criteria
     # reproduce boids for new generation
     # wipe board & populate with new gen
+end
+
+
+function display(env::Environment)
+    # go through grid and apply func to convert num to RGB
+    return map(e->toRGB(e,env.population), env.grid)
+    # save("tmp.png", colorview(RGB, rand(RGB,15,15)))
+end
+
+function toRGB(entry::Number, population::Vector{Boid})
+    if iszero(entry)
+        return RGB(1,1,1)
+    else
+        return toRGB(population[entry])
+    end
 end
