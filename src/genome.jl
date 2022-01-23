@@ -4,6 +4,7 @@ struct Genome
     Genome() = new(Vector{Gene}())
     Genome(genomeStr::Vector{String}) = new(Gene.(genomeStr))
     Genome(n::Int) = Genome(randGenomeStr(n))
+    Genome(genome::Vector{Gene}) = new(genome)
 end
 
 function randGenomeStr(n)

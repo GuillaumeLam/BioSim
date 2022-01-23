@@ -20,6 +20,7 @@ mutable struct Boid
     end
 
     Boid(location::Tuple{Int,Int}) = Boid(location, 16)
+    Boid() = Boid((0,0))
 end
 
 function (boid::Boid)()
