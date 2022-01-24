@@ -1,20 +1,26 @@
-mutable struct Simulator{N<:Number}
-    simStep::N
-    maxStep::N
-    generation::N
-    maxGen::N
+mutable struct Simulator
+    simStep::Number
+    maxStep::Number
+    generation::Number
+    maxGen::Number
     env::Environment
-    frames # dict for vectors to collect frames/data from the env throughout the sim
+    anim::Animation # dict for vectors to collect frames/data from the env throughout the sim
 
-    Simulator(env::Environment, maxStep::N=1000, maxGen::N=10000) where {N<:Number} =
-        new(0,maxStep,0,maxGen,env,Dict{String,Vector{Int}}())
+    Simulator(env::Environment; maxStep::Number=1000, maxGen::Number=10000) =
+        new(0,maxStep,0,maxGen,env,Plots.Animation())
 end
 
 function (sim::Simulator)()
     if sim.simStep == sim.maxStep
         newGen(sim)
     else
-        # add stats to frame stack
+        g = display(sim.env)
+        img = colorview(RGB, g)
+        plot(img)
+        Plots.frame(sim.anim)
+
+        # push other stats of environment
+
         sim.simStep += 1
         sim.env()
     end
@@ -27,7 +33,13 @@ function newGen(sim::Simulator)
 end
 
 function run(sim::Simulator)
-    while sim.generation > sim.maxGen
+    while sim.generation < sim.maxGen
         sim()
+        println("$(sim.generation*100/sim.maxGen)%")
     end
+end
+
+function getSimGif(sim::Simulator, filename::String)
+    # push to folder
+    gif(sim.anim, filename, fps = 24)
 end

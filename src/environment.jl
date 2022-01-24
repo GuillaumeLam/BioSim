@@ -54,7 +54,8 @@ end
 #optional: food?
 
 function (env::Environment)()
-    env.population.()
+    # [boid() for boid in env.population]
+    ((x)->x()).(env.population)
     # use brain action levels to impact grid
 end
 
@@ -73,7 +74,7 @@ end
 
 function toRGB(entry::Number, population::Vector{Boid})
     if iszero(entry)
-        return RGB(1,1,1)
+        return RGB{Float64}(1.0,1.0,1.0)
     else
         return toRGB(population[entry])
     end

@@ -6,7 +6,7 @@ WIP -setup actions(output)
 DONE -setup env
   -add signals layer to world
   DONE -add display of world
-WIP -setup main loops (generation, simStep)
+DONE -setup main loops (generation, simStep)
 DONE - display neuralnet
 -setup selection & breeding (mutation) for next generation
 

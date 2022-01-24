@@ -29,4 +29,8 @@ include("environment.jl")
 export Environment
 export findEmptyLoc, pop!
 
+include("simulator.jl")
+export Simulator
+export run
+
 end
