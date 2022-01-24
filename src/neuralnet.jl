@@ -33,11 +33,16 @@ function moduloConnNum!(g::Genome, conn::Vector{Gene}; maxNeurons=10)
             gene.sourceNum %= NUM_SENSORS
         end
 
+
         if gene.sinkType == 0 # ie a neuron
             gene.sinkNum %= maxNeurons
         else
-            gene.sinkNum %= NUM_SENSORS
+            gene.sinkNum %= NUM_ACTIONS
         end
+
+		# 1-index all nums
+		gene.sourceNum += 1
+		gene.sinkNum += 1
 
         push!(conn, gene)
     end
@@ -112,8 +117,7 @@ end
 function remapConn!(conn::Vector{Gene}, nodes::Vector{Int})
 	offset = 0
 
-	# internal nodes need to be 0 indexed
-	for i in 0:(length(nodes)-1)
+	for i in 1:length(nodes)
 		idx = findfirst(x->x==i,nodes)
 		if isnothing(idx)
 			changeNodeNum!(conn,nodes[end-offset],i)
