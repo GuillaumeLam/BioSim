@@ -251,8 +251,6 @@ function display(nn::NeuralNet)
 	g = zeros(size, size)
 	edgelabels = Dict{Tuple{Int,Int},String}()
 	edgecolor = []
-	edgewidth = []
-	# edgelabels = zeros(size, size)
 
 	for conn in nn.connections
 		f = 0
@@ -274,9 +272,7 @@ function display(nn::NeuralNet)
 
 		g[f,t] = 1
 		push!(edgecolor, conn.weight>0 ? colorant"#00FF7F" : colorant"#DC143C")
-		push!(edgewidth, abs(round(conn.weight,digits=3))/4.0)
 		edgelabels[(f,t)]=string(round(conn.weight,digits=3))
-		# edgelabels[f,t]=string(round(conn.weight,digits=3))
 	end
 
 	n = sort!(collect(keys(nn.neurons)))
