@@ -9,10 +9,23 @@ mutable struct Boid
     probDist::UInt8
     # might remove some params, not sure boid need all this info
 
+    sensors::SensorsInput
+    # actions::Actions
+
     Boid(genome::Vector{String}) = Boid((0,0), genome)
 
     Boid(location::Tuple{Int,Int}, genome::Genome) =
-        new(location, genome, NeuralNet(genome), 0, true, rand(1:4), 0.5, 16)
+        new(
+            location,
+            genome,
+            NeuralNet(genome),
+            0,
+            true,
+            rand(1:4),
+            0.5,
+            16,
+            SensorsInput()
+        )
 
     function Boid(location::Tuple{Int,Int}, genomeLength::Int)
         genome = Genome(genomeLength)
@@ -23,10 +36,10 @@ mutable struct Boid
     Boid() = Boid((0,0))
 end
 
-function (boid::Boid)()
+function step(boid::Boid, sim::Simulator)
     boid.age += 1
 
-    return boid.brain()
+    return step(boid.brain, sim, boid)
 end
 
 # reproduction

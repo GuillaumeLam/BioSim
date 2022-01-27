@@ -53,9 +53,10 @@ end
 #optional: obstacles
 #optional: food?
 
-function (env::Environment)()
+function step(env::Environment, sim::Simulator)
     # [boid() for boid in env.population]
-    ((x)->x()).(env.population)
+    # ((x)->x()).(env.population)
+    step,(env.population, Ref(sim))
     # use brain action levels to impact grid
 end
 

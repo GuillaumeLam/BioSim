@@ -183,7 +183,7 @@ end
 getSensor(a) = return 0.5
 
 # feedfoward ie step forward in time the neural network
-function (brain::NeuralNet)()
+function step(brain::NeuralNet, sim::Simulator, boid::Boid)
 	actionLevels = zeros(NUM_ACTIONS)
 	neuronAcc = zeros(length(brain.neurons))
 	neuronOutputComp = false

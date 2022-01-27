@@ -10,7 +10,7 @@ mutable struct Simulator
         new(0,maxStep,0,maxGen,env,Plots.Animation())
 end
 
-function (sim::Simulator)()
+function step(sim::Simulator)
     if sim.simStep == sim.maxStep
         newGen(sim)
     else
@@ -22,7 +22,7 @@ function (sim::Simulator)()
         # push other stats of environment
 
         sim.simStep += 1
-        sim.env()
+        step(sim.env, sim)
     end
 end
 
