@@ -12,20 +12,22 @@ mutable struct Boid
     sensors::SensorsInput
     # actions::Actions
 
-    Boid(genome::Vector{String}) = Boid((0,0), genome)
-
-    Boid(location::Tuple{Int,Int}, genome::Genome) =
+    function Boid(location::Tuple{Int,Int}, genome::Genome)
+        sensors = SensorsInput()
         new(
             location,
             genome,
-            NeuralNet(genome),
+            NeuralNet(genome, numSensors=length(sensors)),
             0,
             true,
             rand(1:4),
             0.5,
             16,
-            SensorsInput()
+            sensors
         )
+    end
+
+    Boid(genome::Vector{String}) = Boid((0,0), genome)
 
     function Boid(location::Tuple{Int,Int}, genomeLength::Int)
         genome = Genome(genomeLength)
@@ -36,10 +38,11 @@ mutable struct Boid
     Boid() = Boid((0,0))
 end
 
-function step(boid::Boid, sim::Simulator)
+function step(boid::Boid, sim)
     boid.age += 1
 
-    return step(boid.brain, sim, boid)
+    actionLevels = step(boid.brain, sim, boid)
+    return nothing
 end
 
 # reproduction

@@ -1,20 +1,20 @@
 struct NeuralNet
     connections::Vector{Gene}
-    neurons::Dict{Int,AbstractNeuron}
+    neurons::Dict{Int,Neuron}
 
-    function NeuralNet(g::Genome)
+    function NeuralNet(g::Genome; maxNeurons=10, numSensors=21, numActions=11)
         conn = Vector{Gene}()
-        moduloConnNum!(g, conn)
+        moduloConnNum!(g, conn, maxNeurons=maxNeurons, numSensors=numSensors, numActions=numActions)
 		keepUsedConn!(conn)
 		orderConn!(conn)
 
-		neurons = Dict{Int,AbstractNeuron}()
+		neurons = Dict{Int,Neuron}()
 		genNeurons!(conn, neurons)
 		return new(conn, neurons)
     end
 
-    function NeuralNet(genomeStr::Vector{String})
-        return NeuralNet(Genome(genomeStr))
+    function NeuralNet(genomeStr::Vector{String}; maxNeurons=10, numSensors=21, numActions=11)
+        return NeuralNet(Genome(genomeStr), maxNeurons=maxNeurons, numSensors=numSensors, numActions=numActions)
     end
 end
 
@@ -22,22 +22,19 @@ end
 # Constructor func
 #+++++
 
-NUM_SENSORS = 21
-NUM_ACTIONS = 11
-
-function moduloConnNum!(g::Genome, conn::Vector{Gene}; maxNeurons=10)
+function moduloConnNum!(g::Genome, conn::Vector{Gene}; maxNeurons, numSensors, numActions)
     for gene in g.genome
         if gene.sourceType == 0 # ie a neuron
             gene.sourceNum %= maxNeurons
         else
-            gene.sourceNum %= NUM_SENSORS
+            gene.sourceNum %= numSensors
         end
 
 
         if gene.sinkType == 0 # ie a neuron
             gene.sinkNum %= maxNeurons
         else
-            gene.sinkNum %= NUM_ACTIONS
+            gene.sinkNum %= numActions
         end
 
 		# 1-index all nums
@@ -159,7 +156,7 @@ end
 
 #+++++
 
-function genNeurons!(conn::Vector{Gene}, neurons::Dict{Int,AbstractNeuron})
+function genNeurons!(conn::Vector{Gene}, neurons::Dict{Int,Neuron})
 	for gene in conn
 		if gene.sourceType==0 && !haskey(neurons, gene.sourceNum)
 			neurons[gene.sourceNum]=BioSim.Neuron(false)
@@ -183,7 +180,7 @@ end
 getSensor(a) = return 0.5
 
 # feedfoward ie step forward in time the neural network
-function step(brain::NeuralNet, sim::Simulator, boid::Boid)
+function step(brain::NeuralNet, sim, boid)
 	actionLevels = zeros(NUM_ACTIONS)
 	neuronAcc = zeros(length(brain.neurons))
 	neuronOutputComp = false
@@ -201,7 +198,8 @@ function step(brain::NeuralNet, sim::Simulator, boid::Boid)
 		inputVal = rand(Float64)
 
 		if conn.sourceType == 1
-			inputVal = getSensor(conn.sourceNum)
+			# inputVal = getSensor(conn.sourceNum)
+			inputVal = boid.sensors(conn.sourceNum, sim, boid)
 		else
 			inputVal = brain.neurons[conn.sourceNum].output
 		end

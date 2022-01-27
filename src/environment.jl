@@ -53,7 +53,7 @@ end
 #optional: obstacles
 #optional: food?
 
-function step(env::Environment, sim::Simulator)
+function step(env::Environment, sim)
     # [boid() for boid in env.population]
     # ((x)->x()).(env.population)
     step,(env.population, Ref(sim))

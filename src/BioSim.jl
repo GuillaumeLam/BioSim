@@ -22,6 +22,9 @@ include("neuralnet.jl")
 export NeuralNet
 export getUsedConn!, getUsedNeuron!
 
+include("sensorsinput.jl")
+export SensorsInput
+
 include("boid.jl")
 export Boid
 
