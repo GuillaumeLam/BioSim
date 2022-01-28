@@ -6,6 +6,10 @@ struct SensorsInput
 
         push!(sensors, getAGE)
         push!(sensors, getRNG)
+        push!(sensors, getLMX)
+        push!(sensors, getLMY)
+        push!(sensors, getLX)
+        push!(sensors, getLY)
 
         return new(sensors)
     end
@@ -43,6 +47,22 @@ function getLMY(sim, boid)
     else
         return 0.5
     end
+end
+
+function getLX(sim, boid)
+    return boid.location[1]/size(sim.env.grid)[1]
+end
+
+function getLY(sim, boid)
+    return boid.location[2]/size(sim.env.grid)[2]
+end
+
+function getBDX(sim, boid)
+    return min(boid.location[1], size(sim.env.grid)[1]-boid.location[1])/(size(sim.env.grid)[1]/2.0)
+end
+
+function getBDY(sim, boid)
+    return min(boid.location[2], size(sim.env.grid)[2]-boid.location[2])/(size(sim.env.grid)[2]/2.0)
 end
 
 function (sensors::SensorsInput)(sensorNum::Number, sim, boid)

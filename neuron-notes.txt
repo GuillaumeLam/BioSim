@@ -19,8 +19,8 @@ SENSORY INPUTS
 slr = pheromone gradient left-right
 sfd = pheromone gradient forward
 sg = pheromone density
-age = age
-rng = random input
+DONE age = age
+DONE rng = random input
 blr = blockage left-right
 bfd = blockage forward
 osc = oscillator (simple sine wave, could be timed with day/year/etc.)
@@ -29,14 +29,14 @@ pdf = population gradient foward
 pop = population density
 lpf = population long-range forward
 lbf = blockage long-range forward
-lmy = last movement y
-lmx = last movement x
-bdy = north/south border dist
-bdx = east/west border dist
+DONE lmy = last movement y
+DONE lmx = last movement x
+DONE bdy = north/south border dist
+DONE bdx = east/west border dist
 bd = nearest border dist
 gen = genetic similarity of fwd neighbor
-lx = east/west world location
-ly = north/south world location
+DONE lx = east/west world location
+DONE ly = north/south world location
 
 ACTION OUTPUTS
 lpd = set long-probe dist
