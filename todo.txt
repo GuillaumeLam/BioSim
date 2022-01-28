@@ -1,7 +1,7 @@
 -benchmark functions
 -add tests
 
-WIP -setup sensors(input)
+MVP -setup sensors(input)
 WIP -setup actions(output)
 DONE -setup env
   -add signals layer to world

@@ -176,9 +176,6 @@ end
 # Struct func
 #+++++
 
-# tmp function to debug
-getSensor(a) = return 0.5
-
 # feedfoward ie step forward in time the neural network
 function step(brain::NeuralNet, sim, boid)
 	actionLevels = zeros(NUM_ACTIONS)
