@@ -34,7 +34,7 @@ end
 
 function run(sim::Simulator)
     while sim.generation < sim.maxGen
-        sim()
+        step(sim)
         println("$(sim.generation*100/sim.maxGen)%")
     end
 end
